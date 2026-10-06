@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI Educational Lab - Live by Sunday</title>
+  <style>
+    :root {
+      --bg: black;
+      --card-bg: rgba(18, 19, 21, 0.7);
+      --card-border: rgba(29, 32, 213, 0.22);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #38bdf8;
+      --violet: #818cf8;
+      --magenta: #c084fc;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --chip-1: #38bdf8;
+      --chip-2: #818cf8;
+      --chip-3: #c084fc;
+      --chip-4: #34d399;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 25%, rgba(245, 158, 11, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.14) 0%, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px 12px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 16px 0 10px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6366f1, #a855f7, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Nav Switcher */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px;
+      background: rgba(13, 17, 30, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: max-content;
+      padding: 11px 16px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(168, 85, 247, 0.35));
+      color: #ffffff;
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Cards */
+    .module-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 22px;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .module-card.hidden {
+      display: none;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 10px;
+    }
+
+    /* Inputs & Form Elements */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Sliders */
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), #00a8ff);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-danger {
+      background: rgba(255, 71, 87, 0.2);
+      color: var(--rose);
+      border: 1px solid rgba(255, 71, 87, 0.4);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 71, 87, 0.3);
+    }
+
+    .btn-sm {
+      min-height: 36px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+
+    .stat-lbl {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Chips */
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: monospace;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .chip.c0 {
+      background: rgba(0, 242, 254, 0.15);
+      color: #00f2fe;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+    }
+
+    .chip.c1 {
+      background: rgba(121, 40, 202, 0.2);
+      color: #c084fc;
+      border: 1px solid rgba(121, 40, 202, 0.4);
+    }
+
+    .chip.c2 {
+      background: rgba(255, 0, 127, 0.15);
+      color: #ff66b3;
+      border: 1px solid rgba(255, 0, 127, 0.3);
+    }
+
+    .chip.c3 {
+      background: rgba(0, 223, 162, 0.15);
+      color: #00dfa2;
+      border: 1px solid rgba(0, 223, 162, 0.3);
+    }
+
+    .chip.spam {
+      background: rgba(255, 71, 87, 0.2);
+      color: #ff6b81;
+      border: 1px solid rgba(255, 71, 87, 0.4);
+    }
+
+    .chip.ham {
+      background: rgba(0, 223, 162, 0.2);
+      color: #2ed573;
+      border: 1px solid rgba(0, 223, 162, 0.4);
+    }
+
+    .chip.unknown {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Progress Bar */
+    .progress-box {
+      width: 100%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--card-border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+
+    .progress-fill.full {
+      background: linear-gradient(90deg, #ff4757, #ff6b81);
+    }
+
+    /* Chat Window */
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+    }
+
+    .msg-bubble {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      word-break: break-word;
+    }
+
+    .msg-user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(0, 168, 255, 0.3));
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .msg-ai {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-bottom-left-radius: 2px;
+    }
+
+    .msg-bubble.forgotten {
+      opacity: 0.4;
+      background: rgba(255, 255, 255, 0.02);
+      border-style: dashed;
+      filter: grayscale(1);
+    }
+
+    .msg-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    .badge-forgotten {
+      background: rgba(255, 71, 87, 0.3);
+      color: var(--rose);
+    }
+
+    /* Top 5 Horizontal Bars */
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .bar-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+
+    /* Generated Result Box */
+    .result-callout {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed var(--cyan);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Example Lists for Classifier */
+    .example-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+
+    .example-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    /* Side-by-Side 3-Column Grid for Ask 3 Times */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    /* Alert Boxes */
+    .alert-box {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-danger {
+      background: rgba(255, 71, 87, 0.15);
+      border: 1px solid rgba(255, 71, 87, 0.4);
+      color: #ff6b81;
+    }
+
+    .alert-warning {
+      background: rgba(255, 184, 0, 0.15);
+      border: 1px solid rgba(255, 184, 0, 0.4);
+      color: #ffb800;
+    }
+
+    .alert-success {
+      background: rgba(0, 223, 162, 0.15);
+      border: 1px solid rgba(0, 223, 162, 0.4);
+      color: #00dfa2;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px 0 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <header>
+      <h1>AI Educational Lab</h1>
+      <p>Interactive Machine Learning & LLM Fundamentals</p>
+    </header>
+
+    <!-- Nav Switcher -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('m1', this)">🔤 1. Tokens</button>
+      <button class="tab-btn" onclick="switchTab('m2', this)">🔮 2. Next-Word</button>
+      <button class="tab-btn" onclick="switchTab('m3', this)">🎯 3. Train AI</button>
+      <button class="tab-btn" onclick="switchTab('m4', this)">🤖 4. Study Buddy</button>
+      <button class="tab-btn" onclick="switchTab('all', this)">📱 Show All</button>
+    </nav>
+
+    <!-- MODULE 1: TOKEN COUNTER & CONTEXT WINDOW -->
+    <div id="m1" class="module-card">
+      <div class="card-title">🔤 Token Counter & Context Window</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">See how AI splits text into tokens and why context limits
+        cause it to forget older chat memory.</p>
+
+      <div>
+        <label>Input Text / Sample Sentence</label>
+        <textarea id="tok-input"
+          oninput="updateTokens()">AI models read text in small pieces called tokens! Telugu: ఆర్టిఫిషియల్ ఇంటెలిజెన్స్. Long words like internationalization get split into 4-letter chunks!</textarea>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary btn-sm" onclick="compareLang()">🌐 Compare English vs Telugu</button>
+      </div>
+
+      <!-- Live Token Statistics -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div id="cnt-chars" class="stat-val">0</div>
+          <div class="stat-lbl">Characters</div>
+        </div>
+        <div class="stat-card">
+          <div id="cnt-words" class="stat-val">0</div>
+          <div class="stat-lbl">Words</div>
+        </div>
+        <div class="stat-card">
+          <div id="cnt-tokens" class="stat-val">0</div>
+          <div class="stat-lbl">Tokens</div>
+        </div>
+      </div>
+
+      <!-- Token Chips Visualization -->
+      <div>
+        <label>Token Splits (Alternating Colors)</label>
+        <div id="tok-chips" class="chips-container"></div>
+      </div>
+
+      <!-- Context Window Section -->
+      <div
+        style="border-top: 1px dashed var(--card-border); padding-top: 12px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Context Window Capacity Limit</span>
+            <span id="cw-limit-val" style="color: var(--cyan)">40 tokens</span>
+          </div>
+          <input type="range" id="cw-slider" min="20" max="500" value="40" oninput="updateTokens()" />
+        </div>
+
+        <div>
+          <div class="slider-header" style="margin-bottom: 4px;">
+            <span>Memory Window Fill Status</span>
+            <span id="cw-fill-percent">0%</span>
+          </div>
+          <div class="progress-box">
+            <div id="cw-bar" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <div id="cw-alert" class="alert-box alert-danger" style="display: none;">
+          🚨 Full. The AI cannot read more. Older context will be forgotten!
+        </div>
+
+        <!-- Memory Test Section -->
+        <div
+          style="background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+          <label style="color:#fff;">Memory Test Chat</label>
+          <div id="mem-chat-window" class="chat-box"></div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="mem-chat-input" placeholder="Type a message to test AI memory..."
+              onkeydown="if(event.key==='Enter') sendMemMessage()" />
+            <button class="btn btn-primary btn-sm" onclick="sendMemMessage()">Send</button>
+            <button class="btn btn-danger btn-sm" onclick="resetMemChat()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2: NEXT-WORD MACHINE -->
+    <div id="m2" class="module-card hidden">
+      <div class="card-title">🔮 Next-Word Predictor Machine</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Teach the machine with sample text and watch it calculate
+        probabilities to generate new sentences.</p>
+
+      <div>
+        <label>Training Text Corpus</label>
+        <textarea
+          id="nw-corpus">On a sunny Sunday in Vizag we went to RK beach. The waves at RK beach were high and blue. We ate hot mirchi bajji at RK beach while watching ships on the sea. Sunday in Vizag is beautiful and sunny. Every Sunday in Vizag people visit RK beach for hot tea and sunset view.</textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="trainNextWord()">⚙️ Train Bigram Model</button>
+
+      <!-- Predict Next Word Section -->
+      <div
+        style="border-top: 1px dashed var(--card-border); padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <label>What comes after...</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="nw-query-word" placeholder="Type a trained word (e.g. beach, sunday, vizag)..."
+            value="beach" oninput="queryNextWord()" />
+          <button class="btn btn-secondary btn-sm" onclick="queryNextWord()">Lookup</button>
+        </div>
+
+        <div id="nw-top5-container"
+          style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border);">
+          <!-- Top 5 bars populated by JS -->
+        </div>
+      </div>
+
+      <!-- Text Generator Section -->
+      <div
+        style="border-top: 1px dashed var(--card-border); padding-top: 12px; display: flex; flex-direction: column; gap: 12px;">
+        <label style="color:#fff;">Auto Sentence Generator</label>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label>Start Word</label>
+            <input type="text" id="gen-start-word" value="sunday" />
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Length</span>
+              <span id="gen-len-val" style="color:var(--cyan)">15</span>
+            </div>
+            <input type="range" id="gen-len-slider" min="5" max="40" value="15"
+              oninput="document.getElementById('gen-len-val').innerText=this.value" />
+          </div>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Randomness (Temperature)</span>
+            <span id="gen-temp-val" style="color:var(--magenta)">0.3 (Low)</span>
+          </div>
+          <input type="range" id="gen-temp-slider" min="0" max="1" step="0.1" value="0.3"
+            oninput="updateGenTempLabel(this.value)" />
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="generateSentence()">✨ Generate Sentence</button>
+        </div>
+
+        <div class="result-callout" id="gen-result-box">
+          Press "Generate Sentence" to test prediction!
+        </div>
+        <div id="gen-deadend-alert" class="alert-box alert-warning" style="display: none;">
+          🛑 Dead end. The machine never saw this word followed by anything.
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3: TRAIN YOUR OWN AI (SPAM CLASSIFIER) -->
+    <div id="m3" class="module-card hidden">
+      <div class="card-title">🎯 Train Your Own AI (Spam Classifier)</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Teach Naive Bayes AI to classify messages as Spam or Not
+        Spam using word frequency probabilities.</p>
+
+      <!-- Dual Example Lists -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="color: var(--rose);">Spam Examples (<span id="spam-count">0</span>)</label>
+          <div id="spam-list" class="example-list"></div>
+        </div>
+        <div>
+          <label style="color: var(--emerald);">Not Spam Examples (<span id="ham-count">0</span>)</label>
+          <div id="ham-list" class="example-list"></div>
+        </div>
+      </div>
+
+      <!-- Add Example Controls -->
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <input type="text" id="new-ex-text" placeholder="Type a custom message example..." />
+        <div class="btn-group">
+          <button class="btn btn-danger btn-sm" onclick="addExample('spam')">Add as Spam</button>
+          <button class="btn btn-secondary btn-sm" style="border-color:var(--emerald); color:var(--emerald);"
+            onclick="addExample('ham')">Add as Not spam</button>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="trainClassifier()">⚡ Train Classifier</button>
+        <button class="btn btn-danger btn-sm" onclick="loadBiasedData()">⚠️ Load Biased Data</button>
+        <button class="btn btn-secondary btn-sm" onclick="resetClassifierData()">🔄 Reset Initial Data</button>
+      </div>
+
+      <!-- Test Message Box -->
+      <div
+        style="border-top: 1px dashed var(--card-border); padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <label style="color: #fff;">Test a Message</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="cls-test-msg" placeholder="Type message to check..."
+            value="Win a free recharge today" />
+          <button class="btn btn-primary btn-sm" onclick="checkClassifierMsg()">Check</button>
+        </div>
+
+        <div id="cls-result-card"
+          style="background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.9rem; color: var(--text-muted);">AI Verdict:</span>
+            <span id="cls-verdict" style="font-size: 1.4rem; font-weight: 800; color: var(--cyan);">UNKNOWN</span>
+          </div>
+
+          <div>
+            <div class="slider-header" style="font-size:0.75rem;">
+              <span style="color:var(--rose)">Spam Probability</span>
+              <span id="spam-prob-val">50%</span>
+            </div>
+            <div class="progress-box">
+              <div id="spam-prob-bar" class="progress-fill" style="background:var(--rose)"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="slider-header" style="font-size:0.75rem;">
+              <span style="color:var(--emerald)">Not Spam Probability</span>
+              <span id="ham-prob-val">50%</span>
+            </div>
+            <div class="progress-box">
+              <div id="ham-prob-bar" class="progress-fill" style="background:var(--emerald)"></div>
+            </div>
+          </div>
+
+          <div>
+            <label>Word Influence Chips</label>
+            <div id="cls-word-chips" class="chips-container"></div>
+          </div>
+        </div>
+
+        <div id="cls-unsure-alert" class="alert-box alert-warning" style="display: none;">
+          ❓ Unsure. The AI has never seen these words.
+        </div>
+      </div>
+
+      <!-- Score Test Section -->
+      <div
+        style="border-top: 1px dashed var(--card-border); padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="color:#fff;">Accuracy Benchmark Score (6 Hidden Tests)</label>
+          <button class="btn btn-secondary btn-sm" onclick="runAccuracyScore()">Run Score</button>
+        </div>
+        <div id="score-report" class="alert-box alert-success" style="display: none;"></div>
+      </div>
+    </div>
+
+    <!-- MODULE 4: STUDY BUDDY (GEMINI API) -->
+    <div id="m4" class="module-card hidden">
+      <div class="card-title">🤖 Study Buddy Chatbot (Gemini API)</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Direct in-browser Gemini API connection with customizable
+        personas and live token usage tracking.</p>
+
+      <!-- Setup Panel -->
+      <div
+        style="background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label>Gemini API Key (In-Memory Only)</label>
+          <input type="password" id="gemini-key" placeholder="Paste your Gemini API key here..."
+            oninput="setApiKey(this.value)" />
+          <a href="https://aistudio.google.com/apikey" target="_blank"
+            style="font-size: 0.75rem; color: var(--cyan); text-decoration: underline; margin-top: 4px; display: inline-block;">🔑
+            Get a free key from Google AI Studio</a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label>Model Name</label>
+            <input type="text" id="gemini-model" value="gemini-1.5-flash" />
+          </div>
+          <div>
+            <label>Persona Preset</label>
+            <select id="persona-select" onchange="applyPersona(this.value)">
+              <option value="teacher">Strict Teacher</option>
+              <option value="senior" selected>Friendly Senior</option>
+              <option value="funny">Funny Friend</option>
+              <option value="coach">Exam Coach</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label>Editable System Instruction</label>
+          <textarea
+            id="sys-instruction">You are a friendly senior student. Use casual tone and explain concepts with simple, relatable real-world examples.</textarea>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Temperature</span>
+            <span id="chat-temp-val" style="color:var(--cyan)">0.7</span>
+          </div>
+          <input type="range" id="chat-temp-slider" min="0" max="2" step="0.1" value="0.7"
+            oninput="document.getElementById('chat-temp-val').innerText=this.value" />
+        </div>
+      </div>
+
+      <!-- Chat Counter Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.85rem; color: var(--cyan); font-weight: 700;">Messages sent to AI: <span
+            id="sent-counter">0</span> turns</span>
+        <button class="btn btn-danger btn-sm" onclick="clearGeminiChat()">Clear Chat</button>
+      </div>
+
+      <!-- Main Chat Window -->
+      <div id="gemini-chat-window" class="chat-box" style="min-height: 200px;">
+        <div class="msg-bubble msg-ai">Hello! I'm your AI Study Buddy. Ask me any question!</div>
+      </div>
+
+      <!-- Side-by-side Container for Ask 3 Times -->
+      <div id="ask3-container" class="grid-3" style="display: none;"></div>
+
+      <!-- Chat Input Controls -->
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <textarea id="chat-user-input" placeholder="Ask your Study Buddy a question..."
+          onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendGeminiMessage(); }"></textarea>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="sendGeminiMessage()">💬 Send Message</button>
+          <button class="btn btn-secondary btn-sm" onclick="ask3Times()">🎲 Ask 3 Times (Temp Test)</button>
+        </div>
+      </div>
+
+      <!-- Error Box -->
+      <div id="gemini-error-alert" class="alert-box alert-danger" style="display: none;"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Built at Live by Sunday &bull; <a href="https://avi8074.github.io/live-by-sunday"
+        target="_blank">avi8074.github.io/live-by-sunday</a>
+    </footer>
+  </div>
+
+  <script>
+    /* ================= Global State ================= */
+    let geminiApiKey = '';
+    let geminiChatHistory = [];
+    let sentTurnCount = 0;
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (tabId === 'all') {
+        document.querySelectorAll('.module-card').forEach(m => m.classList.remove('hidden'));
+      } else {
+        document.querySelectorAll('.module-card').forEach(m => m.classList.add('hidden'));
+        document.getElementById(tabId).classList.remove('hidden');
+      }
+    }
+
+    /* ================= Module 1: Tokenizer & Context Window ================= */
+    let memChatHistory = [];
+
+    function tokenizeText(text) {
+      if (!text) return [];
+      const tokens = [];
+      // Regex matches non-ASCII (Telugu/Hindi), Punctuation, or English Words
+      const matches = text.match(/[\u0C00-\u0C7F\u0900-\u097F]|[^\w\s]|[\w]+/g) || [];
+
+      matches.forEach(m => {
+        // Non-English character or Punctuation = 1 token
+        if (/^[\u0C00-\u0C7F\u0900-\u097F]$/.test(m) || /^[^\w\s]$/.test(m)) {
+          tokens.push(m);
+        } else if (/^\w+$/.test(m)) {
+          // English word: 1-4 letters = 1 token, >4 letters split in 4-letter chunks
+          for (let i = 0; i < m.length; i += 4) {
+            tokens.push(m.substring(i, i + 4));
+          }
+        }
+      });
+      return tokens;
+    }
+
+    function updateTokens() {
+      const text = document.getElementById('tok-input').value;
+      const tokens = tokenizeText(text);
+
+      // Stats
+      document.getElementById('cnt-chars').innerText = text.length;
+      document.getElementById('cnt-words').innerText = text.trim() ? text.trim().split(/\s+/).length : 0;
+      document.getElementById('cnt-tokens').innerText = tokens.length;
+
+      // Render Chips
+      const chipsBox = document.getElementById('tok-chips');
+      chipsBox.innerHTML = '';
+      tokens.forEach((t, i) => {
+        const chip = document.createElement('span');
+        chip.className = `chip c${i % 4}`;
+        chip.innerText = t;
+        chipsBox.appendChild(chip);
+      });
+
+      // Update Context Window Bar
+      const limit = parseInt(document.getElementById('cw-slider').value);
+      document.getElementById('cw-limit-val').innerText = `${limit} tokens`;
+
+      const bar = document.getElementById('cw-bar');
+      const alert = document.getElementById('cw-alert');
+      const pct = Math.min(100, Math.round((tokens.length / limit) * 100));
+
+      document.getElementById('cw-fill-percent').innerText = `${pct}%`;
+      bar.style.width = `${pct}%`;
+
+      if (tokens.length >= limit) {
+        bar.classList.add('full');
+        alert.style.display = 'flex';
+      } else {
+        bar.classList.remove('full');
+        alert.style.display = 'none';
+      }
+    }
+
+    function compareLang() {
+      document.getElementById('tok-input').value = "English: Artificial Intelligence learns fast.\nTelugu: ఆర్టిఫిషియల్ ఇంటెలిజెన్స్ వేగంగా నేర్చుకుంటుంది.";
+      updateTokens();
+    }
+
+    function sendMemMessage() {
+      const input = document.getElementById('mem-chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const tokens = tokenizeText(msg);
+      memChatHistory.push({ text: msg, tokens: tokens.length });
+      input.value = '';
+      renderMemChat();
+    }
+
+    function renderMemChat() {
+      const limit = parseInt(document.getElementById('cw-slider').value);
+      const container = document.getElementById('mem-chat-window');
+      container.innerHTML = '';
+
+      let accumTokens = 0;
+      // Calculate token sum backwards to determine forgotten items
+      for (let i = memChatHistory.length - 1; i >= 0; i--) {
+        accumTokens += memChatHistory[i].tokens;
+        memChatHistory[i].forgotten = accumTokens > limit;
+      }
+
+      memChatHistory.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `msg-bubble msg-user ${item.forgotten ? 'forgotten' : ''}`;
+        div.innerHTML = `<div>${item.text}</div><div style="font-size:0.7rem; opacity:0.8;">(${item.tokens} tokens)</div>`;
+        if (item.forgotten) {
+          div.innerHTML += `<span class="msg-badge badge-forgotten">Forgotten</span>`;
+        }
+        container.appendChild(div);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function resetMemChat() {
+      memChatHistory = [];
+      renderMemChat();
+    }
+
+    /* ================= Module 2: Next-Word Predictor Machine ================= */
+    let bigramModel = {};
+
+    function trainNextWord() {
+      const text = document.getElementById('nw-corpus').value;
+      const cleanWords = text.toLowerCase().replace(/[^\w\s]/g, '').trim().split(/\s+/);
+      bigramModel = {};
+
+      for (let i = 0; i < cleanWords.length - 1; i++) {
+        const curr = cleanWords[i];
+        const next = cleanWords[i + 1];
+        if (!bigramModel[curr]) bigramModel[curr] = {};
+        bigramModel[curr][next] = (bigramModel[curr][next] || 0) + 1;
+      }
+
+      queryNextWord();
+    }
+
+    function queryNextWord() {
+      const word = document.getElementById('nw-query-word').value.toLowerCase().trim();
+      const container = document.getElementById('nw-top5-container');
+      container.innerHTML = '';
+
+      if (!bigramModel[word]) {
+        container.innerHTML = `<div style="font-size:0.85rem; color:var(--text-muted);">No training data found for "${word}".</div>`;
+        return;
+      }
+
+      const nextMap = bigramModel[word];
+      const total = Object.values(nextMap).reduce((a, b) => a + b, 0);
+      const sorted = Object.entries(nextMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+      sorted.forEach(([nextW, count]) => {
+        const pct = Math.round((count / total) * 100);
+        const item = document.createElement('div');
+        item.className = 'bar-item';
+        item.innerHTML = `
+          <div class="bar-info"><span>"${nextW}"</span><span>${count} times (${pct}%)</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: ${pct}%;"></div></div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function updateGenTempLabel(val) {
+      const label = val < 0.3 ? `${val} (Low / Greedy)` : val < 0.7 ? `${val} (Medium)` : `${val} (High / Creative)`;
+      document.getElementById('gen-temp-val').innerText = label;
+    }
+
+    function generateSentence() {
+      const startWord = document.getElementById('gen-start-word').value.toLowerCase().trim();
+      const len = parseInt(document.getElementById('gen-len-slider').value);
+      const temp = parseFloat(document.getElementById('gen-temp-slider').value);
+      const alert = document.getElementById('gen-deadend-alert');
+      alert.style.display = 'none';
+
+      if (!bigramModel[startWord] && Object.keys(bigramModel).length === 0) trainNextWord();
+
+      let curr = startWord;
+      const resultWords = [curr];
+
+      for (let i = 1; i < len; i++) {
+        const nextMap = bigramModel[curr];
+        if (!nextMap || Object.keys(nextMap).length === 0) {
+          alert.style.display = 'flex';
+          break;
+        }
+
+        const entries = Object.entries(nextMap);
+        let chosenWord = '';
+
+        if (temp === 0) {
+          // Greedy choice
+          entries.sort((a, b) => b[1] - a[1]);
+          chosenWord = entries[0][0];
+        } else {
+          // Weighted probability choice with temperature influence
+          const totalCount = entries.reduce((acc, [, c]) => acc + Math.pow(c, 1 / (temp + 0.1)), 0);
+          let rand = Math.random() * totalCount;
+          for (let [w, c] of entries) {
+            const weight = Math.pow(c, 1 / (temp + 0.1));
+            if (rand <= weight) { chosenWord = w; break; }
+            rand -= weight;
+          }
+          if (!chosenWord) chosenWord = entries[0][0];
+        }
+
+        resultWords.push(chosenWord);
+        curr = chosenWord;
+      }
+
+      document.getElementById('gen-result-box').innerText = `"${resultWords.join(' ')}..."`;
+    }
+
+    /* ================= Module 3: Spam vs Not Spam Classifier ================= */
+    let spamExamples = [
+      "Win a free recharge now", "Claim your prize today", "Free gift click this link",
+      "Get low price loan fast", "Congratulations you won cash", "Urgent claim free reward",
+      "Bonus offer click here", "Instant prize money alert"
+    ];
+    let hamExamples = [
+      "Class moved to 10 AM", "Bring your record book tomorrow", "Dinner at 8 tonight",
+      "Meeting postponed to Monday", "Send me the project report", "Let us study together",
+      "Are you coming to college", "Please call back later"
+    ];
+
+    let wordFreq = { spam: {}, ham: {} };
+    let totalWords = { spam: 0, ham: 0 };
+    let vocabulary = new Set();
+
+    function renderExamples() {
+      const sList = document.getElementById('spam-list');
+      const hList = document.getElementById('ham-list');
+      sList.innerHTML = ''; hList.innerHTML = '';
+
+      document.getElementById('spam-count').innerText = spamExamples.length;
+      document.getElementById('ham-count').innerText = hamExamples.length;
+
+      spamExamples.forEach((ex, idx) => {
+        sList.innerHTML += `<div class="example-item"><span>${ex}</span><button class="btn btn-danger btn-sm" onclick="delExample('spam', ${idx})">&times;</button></div>`;
+      });
+      hamExamples.forEach((ex, idx) => {
+        hList.innerHTML += `<div class="example-item"><span>${ex}</span><button class="btn btn-danger btn-sm" onclick="delExample('ham', ${idx})">&times;</button></div>`;
+      });
+
+      trainClassifier();
+    }
+
+    function addExample(type) {
+      const input = document.getElementById('new-ex-text');
+      const val = input.value.trim();
+      if (!val) return;
+      if (type === 'spam') spamExamples.push(val);
+      else hamExamples.push(val);
+      input.value = '';
+      renderExamples();
+    }
+
+    function delExample(type, idx) {
+      if (type === 'spam') spamExamples.splice(idx, 1);
+      else hamExamples.splice(idx, 1);
+      renderExamples();
+    }
+
+    function trainClassifier() {
+      wordFreq = { spam: {}, ham: {} };
+      totalWords = { spam: 0, ham: 0 };
+      vocabulary = new Set();
+
+      const process = (list, type) => {
+        list.forEach(ex => {
+          const words = ex.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+          words.forEach(w => {
+            if (!w) return;
+            wordFreq[type][w] = (wordFreq[type][w] || 0) + 1;
+            totalWords[type]++;
+            vocabulary.add(w);
+          });
+        });
+      };
+
+      process(spamExamples, 'spam');
+      process(hamExamples, 'ham');
+    }
+
+    function checkClassifierMsg() {
+      const msg = document.getElementById('cls-test-msg').value;
+      const words = msg.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean);
+      const alert = document.getElementById('cls-unsure-alert');
+      alert.style.display = 'none';
+
+      let knownCount = 0;
+      const V = vocabulary.size || 1;
+
+      // Prior probabilities
+      let logSpam = Math.log(spamExamples.length / (spamExamples.length + hamExamples.length));
+      let logHam = Math.log(hamExamples.length / (spamExamples.length + hamExamples.length));
+
+      const chipBox = document.getElementById('cls-word-chips');
+      chipBox.innerHTML = '';
+
+      words.forEach(w => {
+        const countSpam = wordFreq.spam[w] || 0;
+        const countHam = wordFreq.ham[w] || 0;
+
+        if (vocabulary.has(w)) knownCount++;
+
+        // Add-One Laplace Smoothing
+        const pWordSpam = (countSpam + 1) / (totalWords.spam + V);
+        const pWordHam = (countHam + 1) / (totalWords.ham + V);
+
+        logSpam += Math.log(pWordSpam);
+        logHam += Math.log(pWordHam);
+
+        const chip = document.createElement('span');
+        if (countSpam > countHam) chip.className = 'chip spam';
+        else if (countHam > countSpam) chip.className = 'chip ham';
+        else chip.className = 'chip unknown';
+        chip.innerText = w;
+        chipBox.appendChild(chip);
+      });
+
+      if (knownCount === 0) alert.style.display = 'flex';
+
+      // Softmax probability calculation
+      const maxLog = Math.max(logSpam, logHam);
+      const expSpam = Math.exp(logSpam - maxLog);
+      const expHam = Math.exp(logHam - maxLog);
+
+      const pSpam = Math.round((expSpam / (expSpam + expHam)) * 100);
+      const pHam = 100 - pSpam;
+
+      const verdictEl = document.getElementById('cls-verdict');
+      if (pSpam > pHam) {
+        verdictEl.innerText = '🚨 SPAM'; verdictEl.style.color = 'var(--rose)';
+      } else {
+        verdictEl.innerText = '✅ NOT SPAM'; verdictEl.style.color = 'var(--emerald)';
+      }
+
+      document.getElementById('spam-prob-val').innerText = `${pSpam}%`;
+      document.getElementById('spam-prob-bar').style.width = `${pSpam}%`;
+      document.getElementById('ham-prob-val').innerText = `${pHam}%`;
+      document.getElementById('ham-prob-bar').style.width = `${pHam}%`;
+    }
+
+    function runAccuracyScore() {
+      const tests = [
+        { msg: "Win cash prize today", expected: 'spam' },
+        { msg: "Free gift waiting for you", expected: 'spam' },
+        { msg: "Recharge now low price link", expected: 'spam' },
+        { msg: "Class moved to 10 AM", expected: 'ham' },
+        { msg: "Bring record book tomorrow", expected: 'ham' },
+        { msg: "Meeting postponed tonight", expected: 'ham' }
+      ];
+
+      let correct = 0;
+      const V = vocabulary.size || 1;
+
+      tests.forEach(t => {
+        const words = t.msg.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean);
+        let logSpam = Math.log(spamExamples.length / (spamExamples.length + hamExamples.length));
+        let logHam = Math.log(hamExamples.length / (spamExamples.length + hamExamples.length));
+
+        words.forEach(w => {
+          logSpam += Math.log(((wordFreq.spam[w] || 0) + 1) / (totalWords.spam + V));
+          logHam += Math.log(((wordFreq.ham[w] || 0) + 1) / (totalWords.ham + V));
+        });
+
+        const predicted = logSpam > logHam ? 'spam' : 'ham';
+        if (predicted === t.expected) correct++;
+      });
+
+      const report = document.getElementById('score-report');
+      report.style.display = 'flex';
+      report.innerText = `🎯 Benchmark Accuracy: ${correct} of ${tests.length} correct!`;
+    }
+
+    function loadBiasedData() {
+      hamExamples = [
+        "Urgent: Class moved to 10 AM", "Urgent: Bring record book tomorrow",
+        "Urgent: Dinner at 8 tonight", "Urgent: Meeting postponed Monday",
+        "Urgent: Send project report", "Urgent: Study together",
+        "Urgent: Coming to college", "Urgent: Call back later"
+      ];
+      spamExamples = [
+        "Win a free recharge now", "Claim your prize today", "Free gift click this link",
+        "Get low price loan fast", "Congratulations cash won", "Claim free reward",
+        "Bonus offer click here", "Instant prize money alert"
+      ];
+      renderExamples();
+      document.getElementById('cls-test-msg').value = "Urgent: win a free recharge";
+      checkClassifierMsg();
+    }
+
+    function resetClassifierData() {
+      spamExamples = [
+        "Win a free recharge now", "Claim your prize today", "Free gift click this link",
+        "Get low price loan fast", "Congratulations you won cash", "Urgent claim free reward",
+        "Bonus offer click here", "Instant prize money alert"
+      ];
+      hamExamples = [
+        "Class moved to 10 AM", "Bring your record book tomorrow", "Dinner at 8 tonight",
+        "Meeting postponed to Monday", "Send me the project report", "Let us study together",
+        "Are you coming to college", "Please call back later"
+      ];
+      renderExamples();
+    }
+
+    /* ================= Module 4: Study Buddy Chatbot (Gemini API) ================= */
+    const personas = {
+      teacher: "You are a strict teacher. Keep your answers short and formal. Point out and correct mistakes directly.",
+      senior: "You are a friendly senior student. Use casual tone and explain concepts with simple, relatable real-world examples.",
+      funny: "You are a funny friend. Make witty jokes and fun analogies, but keep the core information accurate and clear.",
+      coach: "You are an exam preparation coach. Structure your answers in clear exam format with bulleted key points and summary takeaways."
+    };
+
+    function setApiKey(key) {
+      geminiApiKey = key.trim();
+    }
+
+    function applyPersona(key) {
+      document.getElementById('sys-instruction').value = personas[key] || '';
+    }
+
+    async function sendGeminiMessage() {
+      const input = document.getElementById('chat-user-input');
+      const text = input.value.trim();
+      const errBox = document.getElementById('gemini-error-alert');
+      errBox.style.display = 'none';
+
+      if (!text) return;
+      if (!geminiApiKey) {
+        errBox.innerText = '⚠️ Check your key and model name. Please enter a valid Gemini API key.';
+        errBox.style.display = 'flex';
+        return;
+      }
+
+      // Add User Message to UI & History
+      appendChatMessage('user', text);
+      geminiChatHistory.push({ role: 'user', parts: [{ text: text }] });
+      input.value = '';
+
+      sentTurnCount++;
+      document.getElementById('sent-counter').innerText = sentTurnCount;
+
+      const model = document.getElementById('gemini-model').value.trim() || 'gemini-1.5-flash';
+      const sysInst = document.getElementById('sys-instruction').value;
+      const temp = parseFloat(document.getElementById('chat-temp-slider').value);
+
+      // Loading Indicator
+      const loadingDiv = appendChatMessage('ai', '⏳ Thinking...');
+
+      try {
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: sysInst }] },
+            contents: geminiChatHistory,
+            generationConfig: { temperature: temp }
+          })
+        });
+
+        if (!resp.ok) {
+          if (resp.status === 429) throw new Error('Limit reached. Wait 1 minute.');
+          if (resp.status === 400 || resp.status === 403) throw new Error('Check your key and model name.');
+          throw new Error(`HTTP Error ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
+        const usage = data.usageMetadata || {};
+
+        loadingDiv.innerHTML = `
+          <div>${replyText}</div>
+          <div style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">
+            📊 Tokens used &bull; Prompt: ${usage.promptTokenCount || 0} | Reply: ${usage.candidatesTokenCount || 0}
+          </div>
+        `;
+
+        geminiChatHistory.push({ role: 'model', parts: [{ text: replyText }] });
+      } catch (err) {
+        loadingDiv.remove();
+        errBox.innerText = `🚨 ${err.message || 'No internet or the request was blocked.'}`;
+        errBox.style.display = 'flex';
+      }
+    }
+
+    async function ask3Times() {
+      const input = document.getElementById('chat-user-input');
+      const text = input.value.trim() || "Explain quantum computing in one sentence.";
+      const errBox = document.getElementById('gemini-error-alert');
+      errBox.style.display = 'none';
+
+      if (!geminiApiKey) {
+        errBox.innerText = '⚠️ Check your key and model name. Enter API key to run Ask 3 Times.';
+        errBox.style.display = 'flex';
+        return;
+      }
+
+      const grid = document.getElementById('ask3-container');
+      grid.style.display = 'grid';
+      grid.innerHTML = '<div class="msg-bubble msg-ai">Sample 1: Thinking...</div><div class="msg-bubble msg-ai">Sample 2: Thinking...</div><div class="msg-bubble msg-ai">Sample 3: Thinking...</div>';
+
+      const model = document.getElementById('gemini-model').value.trim() || 'gemini-1.5-flash';
+      const sysInst = document.getElementById('sys-instruction').value;
+      const temp = parseFloat(document.getElementById('chat-temp-slider').value);
+
+      const payload = {
+        systemInstruction: { parts: [{ text: sysInst }] },
+        contents: [{ role: 'user', parts: [{ text: text }] }],
+        generationConfig: { temperature: temp }
+      };
+
+      try {
+        const promises = [1, 2, 3].map(() =>
+          fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).then(r => r.json())
+        );
+
+        const results = await Promise.all(promises);
+        grid.innerHTML = '';
+
+        results.forEach((data, i) => {
+          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Error generating';
+          const usage = data.usageMetadata || {};
+          grid.innerHTML += `
+            <div class="msg-bubble msg-ai">
+              <strong>Sample #${i + 1} (Temp: ${temp})</strong>
+              <div style="margin-top:4px;">${reply}</div>
+              <div style="font-size:0.65rem; color:var(--text-muted); margin-top:4px;">
+                Tokens: ${usage.candidatesTokenCount || 0}
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        grid.innerHTML = `<div class="alert-box alert-danger">Error running Ask 3 Times: ${e.message}</div>`;
+      }
+    }
+
+    function appendChatMessage(role, text) {
+      const container = document.getElementById('gemini-chat-window');
+      const div = document.createElement('div');
+      div.className = `msg-bubble msg-${role === 'user' ? 'user' : 'ai'}`;
+      div.innerText = text;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      return div;
+    }
+
+    function clearGeminiChat() {
+      geminiChatHistory = [];
+      sentTurnCount = 0;
+      document.getElementById('sent-counter').innerText = '0';
+      document.getElementById('gemini-chat-window').innerHTML = '<div class="msg-bubble msg-ai">Chat cleared. Ask me a new question!</div>';
+      document.getElementById('ask3-container').style.display = 'none';
+    }
+
+    /* Initialize App */
+    updateTokens();
+    trainNextWord();
+    renderExamples();
+  </script>
+</body>
+
+</html>
